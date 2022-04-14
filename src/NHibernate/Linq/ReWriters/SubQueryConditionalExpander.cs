@@ -117,6 +117,11 @@ namespace NHibernate.Linq.ReWriters
 				{
 					newFalse = BuildNewSubQuery(newFalse);
 					Rewritten = true;
+
+					if (newFalse.Type != newTrue.Type && newTrue is ConstantExpression constantExpr)
+					{
+						newTrue = Expression.Constant(constantExpr.Value, newFalse.Type);
+					}
 				}
 
 				return Expression.Condition(newTest, newTrue, newFalse);
